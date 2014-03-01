@@ -22,6 +22,20 @@ APP_SECRET = 'pnu1radoh2qeqmo'
 
 class DropboxController < ApplicationController
 
+    def list
+        client = get_dropbox_client
+        unless client
+            redirect_to(:action => 'auth_start') and return
+        end
+
+        path = "/"
+
+        metadata = client.metadata(path, file_limit=25000, list=true, hash=nil, rev=nil, include_deleted=false)
+        
+        render :inline =>
+            "#{metadata}"
+    end
+
     def main
         client = get_dropbox_client
         unless client

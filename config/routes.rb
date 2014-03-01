@@ -1,6 +1,7 @@
 Cosmoscloud::Application.routes.draw do
 
   get  "dropbox/main"
+  get  "dropbox/list"
   post "dropbox/upload"
   get  "dropbox/auth_start"
   get  "dropbox/auth_finish"
