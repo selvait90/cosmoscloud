@@ -3,8 +3,8 @@ source 'https://rubygems.org'
 # Bundle edge Rails instead: gem 'rails', github: 'rails/rails'
 gem 'rails', '4.0.3'
 
-# Use sqlite3 as the database for Active Record
-gem 'mysql2'
+# Use postgresql as the database for Active Record
+gem 'pg'
 
 # Access files in google drive
 gem 'google_drive'
@@ -38,6 +38,9 @@ gem 'dropbox-sdk'
 
 # thin web server
 gem 'thin'
+
+# password encryption
+gem "bcrypt"
 
 group :doc do
   # bundle exec rake doc:rails generates the API under doc/api.

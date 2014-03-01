@@ -1,8 +1,19 @@
 Cosmoscloud::Application.routes.draw do
 
+  # user authentication 
+  get "sign_up" => "users#new", :as =>  "sign_up"
+  get "log_in" => "sessions#new", :as =>  "log_in"
+  get "log_out" => "sessions#destroy", :as =>  "log_out"
+  root :to => "users#new"
+  resources :users
+  resources :sessions
+
+  # google drive routes
   get 'oauth2callback' => 'documents#set_google_drive_token' # user return to this after login
   get 'list_google_doc'  => 'documents#list_google_docs', :as => :list_google_doc #for listing the 
   get 'download_google_doc'  => 'documents#download_google_docs', :as => :download_google_doc #download
+  
+  # dropbox routes
   get  "dropbox/main"
   get  "dropbox/list"
   post "dropbox/upload"
