@@ -3,5 +3,5 @@
 <% @google_docs.each do |doc|%>
 <div><%=radio_button_tag "doc_upload", doc %> &nbsp;<%=doc%></div>
 <%end%>
-<%= f.submit "Download" %>
+<%= submit_tag "Download" %>
 <%end%>

@@ -15,7 +15,7 @@ class DocumentsController < ApplicationController
       @google_docs  << file.title     
     end
     Rails.logger.info "...#{@google_docs.inspect}...."   
-   end
+  end
 
   def download_google_docs
     file_name = params[:doc_upload]
