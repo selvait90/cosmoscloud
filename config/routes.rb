@@ -1,4 +1,8 @@
 Cosmoscloud::Application.routes.draw do
+  
+  get 'oauth2callback' => 'documents#set_google_drive_token' # user return to this after login
+  get 'list_google_doc'  => 'documents#list_google_docs', :as => :list_google_doc #for listing the 
+  get 'download_google_doc'  => 'documents#download_google_docs', :as => :download_google_doc #download
   # The priority is based upon order of creation: first created -> highest priority.
   # See how all your routes lay out with "rake routes".
 

@@ -4,7 +4,13 @@ source 'https://rubygems.org'
 gem 'rails', '4.0.3'
 
 # Use sqlite3 as the database for Active Record
-gem 'sqlite3'
+gem 'mysql2'
+
+# Access files in google drive
+gem 'google_drive'
+
+# Authorization to access files 
+gem 'oauth2'
 
 # Use SCSS for stylesheets
 gem 'sass-rails', '~> 4.0.0'
