@@ -11,10 +11,10 @@ class CosmosesController < ApplicationController
 
  before_filter :google_drive_login, :only => [:list]
 
- #GOOGLE_CLIENT_ID = "1044029776463-btpt14q2kat08idl3t802895g8913p63.apps.googleusercontent.com"
- #GOOGLE_CLIENT_SECRET = "2OyQAbSyyhLrEmAmZuQPlIvm"
- GOOGLE_CLIENT_ID = "1059033759759.apps.googleusercontent.com"
- GOOGLE_CLIENT_SECRET = "HWmFIwzer2VbIXwD3c7nCWLH"
+ GOOGLE_CLIENT_ID = "1044029776463-btpt14q2kat08idl3t802895g8913p63.apps.googleusercontent.com"
+ GOOGLE_CLIENT_SECRET = "2OyQAbSyyhLrEmAmZuQPlIvm"
+ #GOOGLE_CLIENT_ID = "1059033759759.apps.googleusercontent.com"
+ #GOOGLE_CLIENT_SECRET = "HWmFIwzer2VbIXwD3c7nCWLH"
  GOOGLE_CLIENT_REDIRECT_URI = "https://localhost:3000/oauth2callback"
   # you better put constant like above in environments file, I have put it just for simplicity
 
@@ -155,6 +155,9 @@ class CosmosesController < ApplicationController
   end
 
   def google_drive_login
+    unless current_user
+            redirect_to log_in_path
+    end 
     unless session[:google_token].present?
       google_drive = GoogleDrive::GoogleDocs.new(GOOGLE_CLIENT_ID,GOOGLE_CLIENT_SECRET,
                      GOOGLE_CLIENT_REDIRECT_URI)

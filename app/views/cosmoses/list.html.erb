@@ -1,8 +1,20 @@
-<table class="nav pull-right">
+<div>
+<form class="form-search">
+  <input type="text" class="input-medium search-query">
+  <button type="submit" class="btn btn-info">Search</button>
+  <button class="btn btn-info">Add Files</button>
+  <button class="btn btn-info">Add Services</button>
+  <button class="btn btn-info">Usage</button>
+  <button class="btn btn-info">Share</button>
+</form>
+</div>
+<table class="nav table table-hover">
+<b><tr style = "background-color: #d9edf7;"><th>Name</th><th>Service</th></tr></b>
 <% @dropbox_docs.each do |doc|%>
-<tr><td><%= link_to doc,    '#' %></td><td>Dropbox</td></tr>
+<tr><td><%= link_to doc,    '#' %></td><td><%= link_to image_tag("dropbox.png", alt: "dropbox"), '#', id: "service-icon"%>
+</td></tr>
 <%end%>
 <% @google_docs.each do |doc|%>
-<tr><td><%= link_to doc,    '#' %></td><td>Google</td></tr>
+<tr><td><%= link_to doc,    '#' %></td><td><%= link_to image_tag("drive.png", alt: "drive"), '#', id: "service-icon"%></td></tr>
 <%end%>
 </table>
