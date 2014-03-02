@@ -29,10 +29,12 @@ class DropboxController < ApplicationController
         end
 
         path = "/"
-
+        @dropbox_docs = []
         metadata = client.metadata(path, file_limit=25000, list=true, hash=nil, rev=nil, include_deleted=false)
-        render json: metadata
-
+        for dfile in metadata['contents']
+            name = dfile['path']
+            @dropbox_docs << name[1..-1]
+        end
     end
 
     def main

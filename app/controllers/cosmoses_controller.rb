@@ -9,10 +9,12 @@ APP_SECRET = 'pnu1radoh2qeqmo'
 
 class CosmosesController < ApplicationController
 
- before_filter :google_drive_login, :only => [:list_google_docs]
+ before_filter :google_drive_login, :only => [:list]
 
- GOOGLE_CLIENT_ID = "1044029776463-btpt14q2kat08idl3t802895g8913p63.apps.googleusercontent.com"
- GOOGLE_CLIENT_SECRET = "2OyQAbSyyhLrEmAmZuQPlIvm"
+ #GOOGLE_CLIENT_ID = "1044029776463-btpt14q2kat08idl3t802895g8913p63.apps.googleusercontent.com"
+ #GOOGLE_CLIENT_SECRET = "2OyQAbSyyhLrEmAmZuQPlIvm"
+ GOOGLE_CLIENT_ID = "1059033759759.apps.googleusercontent.com"
+ GOOGLE_CLIENT_SECRET = "HWmFIwzer2VbIXwD3c7nCWLH"
  GOOGLE_CLIENT_REDIRECT_URI = "https://localhost:3000/oauth2callback"
   # you better put constant like above in environments file, I have put it just for simplicity
 
@@ -104,7 +106,7 @@ class CosmosesController < ApplicationController
         begin
             access_token, user_id, url_state = get_web_auth.finish(params)
             session[:access_token] = access_token
-            redirect_to :action => 'main'
+            redirect_to :action => 'list'
         rescue DropboxOAuth2Flow::BadRequestError => e
             render :text => "Error in OAuth 2 flow: Bad request: #{e}"
         rescue DropboxOAuth2Flow::BadStateError => e
@@ -149,7 +151,7 @@ class CosmosesController < ApplicationController
     auth_token = oauth_client.auth_code.get_token(params[:code], 
                  :redirect_uri => GOOGLE_CLIENT_REDIRECT_URI)
     session[:google_token] = auth_token.token if auth_token
-    redirect_to list_google_doc_path
+    redirect_to dashboard_path
   end
 
   def google_drive_login

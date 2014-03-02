@@ -1,4 +1,3 @@
-<%= form_tag download_google_doc_path do %>
 <table class="nav pull-right">
 <% @dropbox_docs.each do |doc|%>
 <tr><td><%= link_to doc,    '#' %></td><td>Dropbox</td></tr>
@@ -7,4 +6,3 @@
 <tr><td><%= link_to doc,    '#' %></td><td>Google</td></tr>
 <%end%>
 </table>
-<%end%>
