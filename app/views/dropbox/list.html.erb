@@ -1,0 +1,7 @@
+<%= form_tag download_google_doc_path do %>
+<ul class="nav pull-right">
+<% @dropbox_docs.each do |doc|%>
+<li><%= link_to doc,    '#' %></li>
+<%end%>
+</ul>
+<%end%>
