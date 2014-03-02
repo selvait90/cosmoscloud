@@ -1,7 +1,7 @@
-<div>Select The document You want to Download</div>
 <%= form_tag download_google_doc_path do %>
+<ul class="nav pull-right">
 <% @google_docs.each do |doc|%>
-<div><%=radio_button_tag "doc_upload", doc %> &nbsp;<%=doc%></div>
+<li><%= link_to doc,    '#' %></li>
 <%end%>
-<%= submit_tag "Download" %>
+</ul>
 <%end%>

@@ -14,7 +14,6 @@ class DocumentsController < ApplicationController
     for file in google_session.files
       @google_docs  << file.title     
     end
-    Rails.logger.info "...#{@google_docs.inspect}...."   
   end
 
   def download_google_docs

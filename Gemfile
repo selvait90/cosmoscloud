@@ -36,6 +36,9 @@ gem 'jbuilder', '~> 1.2'
 # dropbox sdk
 gem 'dropbox-sdk'
 
+# drive sdk
+gem 'google-api-client'
+
 # thin web server
 gem 'thin'
 

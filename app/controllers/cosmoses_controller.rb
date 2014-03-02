@@ -1,37 +1,42 @@
-# ---------------------------------------------------------------------------------------
-# A Rails 3 controller that:
-# - Runs the through Dropbox's OAuth 2 flow, yielding a Dropbox API access token.
-# - Makes a Dropbox API call to upload a file.
-#
-# To run:
-# 1. You need a Rails 3 project (to create one, run: rails new <folder-name>)
-# 2. Copy this file into <folder-name>/app/controllers/
-# 3. Add the following lines to <folder-name>/config/routes.rb
-#        get  "dropbox/main"
-#        post "dropbox/upload"
-#        get  "dropbox/auth_start"
-#        get  "dropbox/auth_finish"
-# 4. Run: rails server
-# 5. Point your browser at: https://localhost:3000/dropbox/main
-
 require 'dropbox_sdk'
 require 'securerandom'
+require 'google_drive/google_docs'
+require 'google/api_client'
 
 APP_KEY = '8s12gve6904qgu2'
 APP_SECRET = 'pnu1radoh2qeqmo'
 
-class DropboxController < ApplicationController
+
+class CosmosesController < ApplicationController
+
+ before_filter :google_drive_login, :only => [:list_google_docs]
+
+ GOOGLE_CLIENT_ID = "1044029776463-btpt14q2kat08idl3t802895g8913p63.apps.googleusercontent.com"
+ GOOGLE_CLIENT_SECRET = "2OyQAbSyyhLrEmAmZuQPlIvm"
+ GOOGLE_CLIENT_REDIRECT_URI = "https://localhost:3000/oauth2callback"
+  # you better put constant like above in environments file, I have put it just for simplicity
 
     def list
         client = get_dropbox_client
         unless client
             redirect_to(:action => 'auth_start') and return
         end
-
+        @dropbox_docs = []
         path = "/"
 
         metadata = client.metadata(path, file_limit=25000, list=true, hash=nil, rev=nil, include_deleted=false)
-        render json: metadata
+        for dfile in metadata['contents']
+        	name = dfile['path']
+        	@dropbox_docs << name[1..-1]
+       	end
+       	google_session = GoogleDrive.login_with_oauth(session[:google_token])
+    	@google_docs = []
+    	for file in google_session.files
+      		@google_docs  << file.title     
+    	end
+        #drivelist = get_dr.slice!(-)
+        #render :inline => "#{metadata['contents']} \n\n\n"
+        #render json: metadata
 
     end
 
@@ -68,6 +73,7 @@ class DropboxController < ApplicationController
         end
     end
 
+   	# dropbox 
     def get_dropbox_client
         if session[:access_token]
             begin
@@ -117,4 +123,41 @@ class DropboxController < ApplicationController
             render :text => "Error communicating with Dropbox servers."
         end
     end
+
+    ######################## Google Drive ########################
+  def list_google_docs
+    google_session = GoogleDrive.login_with_oauth(session[:google_token])
+    @google_docs = []
+    for file in google_session.files
+      @google_docs  << file.title     
+    end
+  end
+
+  def download_google_docs
+    file_name = params[:doc_upload]
+    file_path = Rails.root.join('tmp',"doc_#{file_name}")
+    google_session = GoogleDrive.login_with_oauth(session[:google_token])
+    file = google_session.file_by_title(file_name)
+    file.download_to_file(file_path)
+    redirect_to list_google_doc_path
+  end
+
+  def set_google_drive_token
+    google_doc = GoogleDrive::GoogleDocs.new(GOOGLE_CLIENT_ID,GOOGLE_CLIENT_SECRET,
+                GOOGLE_CLIENT_REDIRECT_URI)
+    oauth_client = google_doc.create_google_client
+    auth_token = oauth_client.auth_code.get_token(params[:code], 
+                 :redirect_uri => GOOGLE_CLIENT_REDIRECT_URI)
+    session[:google_token] = auth_token.token if auth_token
+    redirect_to list_google_doc_path
+  end
+
+  def google_drive_login
+    unless session[:google_token].present?
+      google_drive = GoogleDrive::GoogleDocs.new(GOOGLE_CLIENT_ID,GOOGLE_CLIENT_SECRET,
+                     GOOGLE_CLIENT_REDIRECT_URI)
+      auth_url = google_drive.set_google_authorize_url
+      redirect_to auth_url
+    end
+  end
 end

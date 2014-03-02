@@ -1,0 +1,2 @@
+module CosmosesHelper
+end
